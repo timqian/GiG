@@ -11,7 +11,7 @@ const github = axios.create({
 })
 
 github.get(`/timqian/star-history/master/README.md`)
-  .then((res) => {console.log('')})
+  .then((res) => {console.log('res')})
 
 const container = document.getElementById('container');
 

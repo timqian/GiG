@@ -4,5 +4,5 @@ export default {
     username: 'timqian',
     repo: 'simple-cms',
   },
-  apiBaseURL: 'https://api.github.com/repos/',
+  apiBaseURL: 'https://api.github.com/repos',
 }
