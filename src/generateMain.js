@@ -5,11 +5,12 @@
  */
 import axios from "axios";
 import config from "./config";
+const { apiBaseURL, repo } = config;
+
 export default async function () {
-  const content = await axios.get(`${config.apiBaseURL}/timqian/simple-cms/contents/_posts`)
-    /*.then((res) => {console.log('hello: ', res.data);})*/
-    .catch((res) => {console.log(res);})
-  /*console.log(`${config.apiBaseURL}/timqian/simple-cms/contents/_posts`);*/
-  console.log(content.data);
+  const content = await axios.get(`${apiBaseURL}/${repo}/contents/_posts`);
+  content.data.map((item) => {
+    
+  });
   return content.data;
 }

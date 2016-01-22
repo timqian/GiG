@@ -1,8 +1,4 @@
 export default {
-  siteName: 'simple-cms',
-  githubUserSettings: {
-    username: 'timqian',
-    repo: 'simple-cms',
-  },
+  repo: 'timqian/simple-cms',
   apiBaseURL: 'https://api.github.com/repos',
 }
