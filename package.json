@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "axios": "^0.9.0",
+    "marked": "^0.3.5",
     "milligram": "^1.0.3"
   }
 }
