@@ -1,5 +1,5 @@
 /**
- * generate Main page
+ * generate Main page by accessing post folder on github repo
  *
  * @return {String}
  */

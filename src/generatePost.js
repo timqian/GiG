@@ -1,9 +1,8 @@
 /**
- * Generage page from markdown
- * and change default behaiver of <a> tag
+ * generage post html
  *
  * @param {String} fileLocation location of the file in git repo
- * @return {String} html
+ * @return {String}
  */
 
 import axios from "axios";
