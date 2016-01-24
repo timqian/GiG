@@ -20,7 +20,7 @@ let currentPost = {
   fileContent: '',
 }
 
-const container = document.getElementById('container');
+const container = document.getElementById('contentContainer');
 
 const handleHashChange = async () => {
   console.log(location.hash);

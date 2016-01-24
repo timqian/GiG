@@ -21,7 +21,7 @@ export default async () => {
       const date = item.name.slice(0, 10)
       const path = item.path;
       return `<li>
-                <a href='#${path}'><b>${title}</b></a> &nbsp
+                <a href='#${path}'><b><big>${title}</big></b></a> &nbsp
                 <small>${date}</small>
               </li>`;
     });
