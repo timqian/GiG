@@ -4,7 +4,10 @@
  */
 
 import normalize from "!style!css!normalize.css";
-import milligram from '!style!css!milligram';
+/*import milligram from '!style!css!milligram';*/
+import style from "!style!css!sass!./style/index.sass";
+/*import purecss from "!style!css!purecss";*/
+
 import generateMain from "./generateMain";
 import authAxios from "./authAxios";
 import generateComposer from "./generateComposer";

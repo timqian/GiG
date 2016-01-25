@@ -4,8 +4,8 @@
   "description": "simple cms using github as backend",
   "main": "index.js",
   "scripts": {
-    "start": "webpack -d --watch & open ./index.html",
-    "build": "webpack -d -p"
+    "start": "webpack-dev-server --progress --colors",
+    "build": "webpack -p"
   },
   "keywords": [
     "CMS",
@@ -16,16 +16,19 @@
   "devDependencies": {
     "babel-core": "^6.4.5",
     "babel-loader": "^6.2.1",
+    "babel-plugin-transform-runtime": "^6.3.13",
     "babel-preset-es2015": "^6.3.13",
     "babel-preset-stage-0": "^6.3.13",
-    "babel-plugin-transform-runtime": "^6.3.13",
     "css-loader": "^0.23.1",
+    "node-sass": "^3.4.2",
+    "sass-loader": "^3.1.2",
     "style-loader": "^0.13.0"
   },
   "dependencies": {
     "axios": "^0.9.0",
     "marked": "^0.3.5",
     "milligram": "^1.0.3",
-    "normalize.css": "^3.0.3"
+    "normalize.css": "^3.0.3",
+    "purecss": "^0.6.0"
   }
 }

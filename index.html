@@ -11,22 +11,22 @@
 
   </head>
   <body>
-    <div class="container" style="max-width: 80.0rem;">
-      <div id='header' >
-        <h3>
-          <a href='#' >simple-cms</a> &nbsp
-          <a href='#pages/about.md' class="float-right" ><small><small>about</small></small></a> &nbsp
-        </h3>
-      </div>
 
-      <div id='contentContainer'> </div>
+    <header>
+      <a href='#' class="brand">simple-cms</a> &nbsp
+      <a class="item" href='#pages/about.md' class="float-right" >about</a> &nbsp
+    </header>
 
-      <div id='footer'>
-        <a href='#compose' id='composeLink' style='display:none'><small>compose</small></a>
-        <a href='#edit' id='editLink' style='display:none'><small>edit</small></a> &nbsp
-        powerd by <a href='https://github.com/timqian'>simple-cms</a>
-      </div>
+    <div id='container'>
+      <main id='contentContainer'></main>
     </div>
+
+    <footer>
+      <a href='#compose' id='composeLink' style='display:none'><small>compose</small></a>
+      <a href='#edit' id='editLink' style='display:none'><small>edit</small></a> &nbsp
+      powerd by &nbsp<a href='https://github.com/timqian'>simple-cms</a>
+    </footer>
+
     <script type='text/javascript' src='./dist/bundle.js' charset='utf-8'></script>
   </body>
 </html>
