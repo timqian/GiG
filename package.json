@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --progress --colors",
-    "build": "webpack -p"
+    "build": "webpack -p -d"
   },
   "keywords": [
     "CMS",

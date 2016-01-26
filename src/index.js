@@ -5,6 +5,7 @@
 
 import normalize from "!style!css!normalize.css";
 /*import milligram from '!style!css!milligram';*/
+/*import css from "!style!css!./style/style.css";*/
 import style from "!style!css!sass!./style/index.sass";
 /*import purecss from "!style!css!purecss";*/
 
