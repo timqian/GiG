@@ -1,4 +1,11 @@
-## needed utils:
+# function design: 第一版（没有分类功能，没有分页功能）
 
-- get content(use `https://raw.githubusercontent.com`)
-- compose content(use `https://api.github.com/`)
+- `checkAdmin()`: if admin mode, show admin buttons
+- `getAllPosts()`
+- `getContent()`
+- `renderMain()`
+- `renderContent()`
+- `renderComposer()`
+- `renderLogin()`
+- `commitNew()`
+- `commitEdit()`

@@ -51,12 +51,12 @@ const handleHashChange = async () => {
       break;
 
     case '#compose':
-      if (authedAxios) {     // to see if authed Axios is created
+      /*if (authedAxios) {     // to see if authed Axios is created*/
         currentPost = {};
         container.innerHTML = generateComposer(currentPost);
-      } else {
+      /*} else {
         location.hash = '#login';
-      }
+      }*/
       break;
 
     case '#edit':
@@ -82,8 +82,8 @@ const handleHashChange = async () => {
       break;
 
 
-    case '#finishCompose':
-      console.log(document.getElementById('titleField'), document.getElementById('contentField'));
+    /*case '#finishCompose':
+      console.log(document.getElementById('container'), document.getElementById('titleField'), document.getElementById('contentField'));
       const title = document.getElementById('titleField').value;
       const content = document.getElementById('contentField').value;
       console.log("title", title);
@@ -93,7 +93,7 @@ const handleHashChange = async () => {
       } else {
         commitNew(authedAxios, title, content);
       };
-      break;
+      break;*/
 
     default:
       alert('sorry, but there is no such hash')
