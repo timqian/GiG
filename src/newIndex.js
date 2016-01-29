@@ -16,21 +16,27 @@ import store from "./store";
 import checkAdmin from "./utils/checkAdmin";
 import getAllPosts from "./utils/getAllPosts";
 import renderMain from "./utils/renderMain";
+import getContent from "./utils/getContent";
+import renderContent from "./utils/renderContent";
 
 const router = new Navigo(null, false);  // root = null, useHash=false
 
 const container = document.getElementById('contentContainer');
 
-router.on('/', async () => {
-  checkAdmin();
-  store.allPosts = await getAllPosts();
-  container.innerHTML = await renderMain(store.allPosts);
+router.on({
+  '/': async () => {
+    checkAdmin();
+    store.allPosts = await getAllPosts();
+    container.innerHTML = await renderMain(store.allPosts);
+  },
+  '/posts/:path': async (params) => {
+    console.log("params", params);
+    checkAdmin();
+    console.log(params);
+    store.currentPost = await getContent(`posts/${params.path}`);
+    container.innerHTML = await renderContent(store.currentPost);
+  },
 });
-
-router.on('/posts/:path', async (params) => {
-  checkAdmin();
-  store.currentPost = await getContent(`posts/${params.path}`);
-  container.innerHTML = await renderContent(store.currentPost);
-});
-
-router.on('/pages/:path')
+console.log("router", router);
+console.log("container", container);
+/*router.on('/pages/:path')*/
