@@ -66,3 +66,7 @@ https://github.com/search?utf8=%E2%9C%93&q=test+repo%3Atimqian%2Fsimple-cms+path
 - `/edit`
 - `/login`
 - `#admin`: indicate if user is in admin mode
+
+
+## 用 `?admin` 来表示用户处于 admin 状态
+or 用 多一个 router: /admin/, /admin/posts/:name, admin/pages/:name, admin/
