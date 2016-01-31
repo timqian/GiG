@@ -1,6 +1,6 @@
 /**
  * Route design
- *  - `/`:            show all posts' name
+ *  - `/`:            show all posts' title
  *  - `/posts/:path`  show post's content
  *  - `/pages/:path`  show page's content
  *  - `/compose`      compose new post
@@ -11,30 +11,45 @@
 import normalize from "!style!css!normalize.css";
 import style from "!style!css!sass!./style/index.sass";
 import Navigo from "navigo";
+import { repo } from "./config";
 import store from "./store";
 import authAxios from "./utils/authAxios";
 import checkAdmin from "./utils/checkAdmin";
 import getAllPosts from "./utils/getAllPosts";
-import renderMain from "./components/renderMain";
 import getContent from "./utils/getContent";
-import renderContent from "./components/renderContent";
+import commitPost from "./utils/commitPost";
+import commitEdit from "./utils/commitEdit";
+import getPostSha from "./utils/getPostSha";
+
+import renderPost from "./components/renderPost";
 import renderComposer from "./components/renderComposer";
 import renderLogin from "./components/renderLogin";
-import commitPost from "./utils/commitPost";
+import renderMain from "./components/renderMain";
+import renderPage from "./components/renderPage";
+import renderEditor from "./components/renderEditor";
 
 const router = new Navigo(null, true); // root = null, useHash=true
 const container = document.getElementById('contentContainer');
 
 router.on({
-  'posts/:path': async (params) => {
+  /*'posts/:pathRelative/:title': async (params) => {  // intend for category
+    console.log("params", params);
     checkAdmin();
-    store.currentPost = await getContent(`posts/${params.path}`);
-    container.innerHTML = await renderContent(store.currentPost);
+    store.currentPost.content = await getContent(`posts/${params.pathRelative}`);
+    container.innerHTML = await renderPost(store.currentPost);
+  },*/
+  'posts/:title': async (params) => {
+    checkAdmin();
+    store.currentPost.title = params.title.slice(11, -3); // delete date and '.md'
+    store.currentPost.path = `posts/${params.title}`;
+    store.currentPost.sha = getPostSha(store.currentPost.path, store.allPosts);
+    store.currentPost.content = await getContent(store.currentPost.path);
+    container.innerHTML = await renderPost(store.currentPost.title, store.currentPost.content);
   },
-  'pages/:path': async (params) => {
+  'pages/:title': async (params) => {
     checkAdmin();
-    store.currentPost = await getContent(`pages/${params.path}`);
-    container.innerHTML = await renderContent(store.currentPost);
+    const pageContent = await getContent(`pages/${params.title}`);
+    container.innerHTML = await renderPage(pageContent);
   },
   'admin/compose': async () => {
     checkAdmin();
@@ -45,28 +60,44 @@ router.on({
     checkAdmin();
     const title = document.getElementById('titleField').value;
     const content = document.getElementById('contentField').value;
-    commitPost(title, content);
+    await commitPost(title, content);
   },
   'admin/edit': async () => {
     checkAdmin();
-
+    const html = `<h1>${store.currentPost.title}</h1>${renderEditor(store.currentPost.content)}`;
+    container.innerHTML = html;
   },
-  'admin/delete': async () => {
+  'admin/finishEdit': async () => {
     checkAdmin();
+    const content = document.getElementById('editedContent').value;
+    await commitEdit(content);
+  },
+  'admin/delete': async () => {   //ref: https://developer.github.com/v3/repos/contents/#delete-a-file
+    checkAdmin();
+    store.authedAxios.delete(`/repos/${repo}/contents/${store.currentPost.path}`,{
+      data: {
+        message: "delete from GiG",
+        sha: store.currentPost.sha,
+      },
+    })
+    .then(res => {
+      alert('delete success');
+      location.hash = '#';
+    })
+    .catch(res => { alert(res); });
   },
   'admin/login/checkLogin': async () => {
+    checkAdmin();
     const password = document.getElementById('loginPasswordInput').value;
     store.authedAxios = authAxios(password);
     console.log("password", password);
     store.authedAxios.get('/user')
-      .then((res) => {
-        location.hash = 'admin'
-      })
-      .catch((res) => {
-        alert('wrong pass');
-        history.go(-1);
-        authedAxios = undefined;
-      });
+    .then(res => { location.hash = 'admin'; })
+    .catch((res) => {
+      alert('wrong pass');
+      history.go(-1);
+      authedAxios = undefined;
+    });
   },
   'admin/login': async () => {
     const html = renderLogin();

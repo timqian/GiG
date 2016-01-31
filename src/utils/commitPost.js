@@ -20,9 +20,8 @@ export default async (title, content) => {
   const dateString = `${year}-${month<10 ? '0'+month : month}-${day}`;
   /*console.log("dateString", dateString);*/
 
-  // generate fileName and content
+  // generate fileName
   const fileName = `${dateString}-${title}.md`;
-  content = `# ${title}\n\n${content}`;
 
   const putUrl = `/repos/${repo}/contents/posts/${fileName}`;
   const res = await store.authedAxios.put(putUrl, {
