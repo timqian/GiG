@@ -1,13 +1,3 @@
-/**
- * Route design
- *  - `/`:            show all posts' title
- *  - `/posts/:path`  show post's content
- *  - `/pages/:path`  show page's content
- *  - `/compose`      compose new post
- *  - `/edit`         edit post
- *  - `/login`        to be admin
- *  - `#admin`        indicate if user is in admin mode
- */
 import normalize from "!style!css!normalize.css";
 import style from "!style!css!sass!./style/index.sass";
 import Navigo from "navigo";
@@ -20,7 +10,6 @@ import getContent from "./utils/getContent";
 import commitPost from "./utils/commitPost";
 import commitEdit from "./utils/commitEdit";
 import getPostSha from "./utils/getPostSha";
-
 import renderPost from "./components/renderPost";
 import renderComposer from "./components/renderComposer";
 import renderLogin from "./components/renderLogin";
@@ -32,7 +21,7 @@ const router = new Navigo(null, true); // root = null, useHash=true
 const container = document.getElementById('contentContainer');
 
 router.on({
-  /*'posts/:pathRelative/:title': async (params) => {  // intend for category
+  /*'posts/:pathRelative/:title': async (params) => {        // intend for category
     console.log("params", params);
     checkAdmin();
     store.currentPost.content = await getContent(`posts/${params.pathRelative}`);
@@ -42,7 +31,6 @@ router.on({
     checkAdmin();
     store.currentPost.title = params.title.slice(11, -3); // delete date and '.md'
     store.currentPost.path = `posts/${params.title}`;
-    store.currentPost.sha = getPostSha(store.currentPost.path, store.allPosts);
     store.currentPost.content = await getContent(store.currentPost.path);
     container.innerHTML = await renderPost(store.currentPost.title, store.currentPost.content);
   },
@@ -64,6 +52,7 @@ router.on({
   },
   'admin/edit': async () => {
     checkAdmin();
+    store.currentPost.sha = getPostSha(store.currentPost.path, store.allPosts);
     const html = `<h1>${store.currentPost.title}</h1>${renderEditor(store.currentPost.content)}`;
     container.innerHTML = html;
   },
@@ -74,6 +63,7 @@ router.on({
   },
   'admin/delete': async () => {   //ref: https://developer.github.com/v3/repos/contents/#delete-a-file
     checkAdmin();
+    store.currentPost.sha = getPostSha(store.currentPost.path, store.allPosts);
     store.authedAxios.delete(`/repos/${repo}/contents/${store.currentPost.path}`,{
       data: {
         message: "delete from GiG",

@@ -17,7 +17,7 @@ export default async (title, content) => {
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
   const day = date.getDate();
-  const dateString = `${year}-${month<10 ? '0'+month : month}-${day}`;
+  const dateString = `${year}-${month<10 ? '0'+month : month}-${day<10 ? '0'+day : day}`;
   /*console.log("dateString", dateString);*/
 
   // generate fileName
@@ -28,7 +28,9 @@ export default async (title, content) => {
     message: 'commited from simple-cms',
     content: window.btoa(unescape(encodeURIComponent(content))),  //according to http://stackoverflow.com/questions/23223718/failed-to-execute-btoa-on-window-the-string-to-be-encoded-contains-characte
   }).catch((res) => {
+    console.log("res", res);
     alert(res);
   });
+  alert('commit success');
   location.hash = '#';
 };

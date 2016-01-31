@@ -2,13 +2,12 @@
  * store state of the app
  */
 export default {
-  admin: false,
-  authedAxios: undefined,  // will be create when user login
-  allPosts: [],            // all posts info on github [{title  date   path  sha}]
+  authedAxios: undefined,  // will be created when user login
+  allPosts: [],            // [{title  date   path  sha}]
   currentPost: {
     title: undefined,
     path: undefined,
     content: undefined,
-    sha: undefined,
+    sha: undefined,        // will be assigned before commit
   },
 };

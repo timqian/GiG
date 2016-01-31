@@ -17,7 +17,9 @@ export default async (content) => {
     content: window.btoa(unescape(encodeURIComponent(content))),  //according to http://stackoverflow.com/questions/23223718/failed-to-execute-btoa-on-window-the-string-to-be-encoded-contains-characte
     sha: store.currentPost.sha,
   }).catch((res) => {
+    console.log("res", res);
     alert(res);
   });
+  alert('commit success');
   location.hash = '#';
 };
