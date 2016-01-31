@@ -1,104 +1,85 @@
 /**
- * Do different things for different hash
- *
+ * Route design
+ *  - `/`:            show all posts' name
+ *  - `/posts/:path`  show post's content
+ *  - `/pages/:path`  show page's content
+ *  - `/compose`      compose new post
+ *  - `/edit`         edit post
+ *  - `/login`        to be admin
+ *  - `#admin`        indicate if user is in admin mode
  */
-
 import normalize from "!style!css!normalize.css";
-/*import milligram from '!style!css!milligram';*/
-/*import css from "!style!css!./style/style.css";*/
 import style from "!style!css!sass!./style/index.sass";
-/*import purecss from "!style!css!purecss";*/
+import Navigo from "navigo";
+import store from "./store";
+import authAxios from "./utils/authAxios";
+import checkAdmin from "./utils/checkAdmin";
+import getAllPosts from "./utils/getAllPosts";
+import renderMain from "./components/renderMain";
+import getContent from "./utils/getContent";
+import renderContent from "./components/renderContent";
+import renderComposer from "./components/renderComposer";
+import renderLogin from "./components/renderLogin";
+import commitPost from "./utils/commitPost";
 
-import generateMain from "./generateMain";
-import authAxios from "./authAxios";
-import generateComposer from "./generateComposer";
-import getContent from "./getContent";
-import marked from "marked";
-import commitNew from "./commitNew";
-import commitEdit from "./commitEdit";
-
-let authedAxios;   // to store the authed axios instance
-
-let currentPost = {
-  filePath: '',
-  fileContent: '',
-}
-
+const router = new Navigo(null, true); // root = null, useHash=true
 const container = document.getElementById('contentContainer');
 
-const handleHashChange = async () => {
-  console.log(location.hash);
+router.on({
+  'posts/:path': async (params) => {
+    checkAdmin();
+    store.currentPost = await getContent(`posts/${params.path}`);
+    container.innerHTML = await renderContent(store.currentPost);
+  },
+  'pages/:path': async (params) => {
+    checkAdmin();
+    store.currentPost = await getContent(`pages/${params.path}`);
+    container.innerHTML = await renderContent(store.currentPost);
+  },
+  'admin/compose': async () => {
+    checkAdmin();
+    const html = renderComposer();
+    container.innerHTML = html;
+  },
+  'admin/finishCompose': async () => {
+    checkAdmin();
+    const title = document.getElementById('titleField').value;
+    const content = document.getElementById('contentField').value;
+    commitPost(title, content);
+  },
+  'admin/edit': async () => {
+    checkAdmin();
 
-  // insert different html into the container
-  // according to location hash
-  switch (location.hash.split('/')[0]) {
-
-    case '':              // main page
-      container.innerHTML = await generateMain();
-      document.getElementById('editLink').style.display = 'none';
-      document.getElementById('composeLink').style.display = ''; // show compose link
-      break;
-
-    case '#posts':
-    case '#pages':                              // post or page
-      const filePath = location.hash.slice(1);
-      const md = await getContent(filePath);
-      currentPost.filePath = filePath;
-      currentPost.fileContent = md;             // set currentPost for #edit to use
-      container.innerHTML = marked(md);
-      document.getElementById('editLink').style.display = '';
-      document.getElementById('composeLink').style.display = 'none'; // show edit link
-      break;
-
-    case '#compose':
-      /*if (authedAxios) {     // to see if authed Axios is created*/
-        currentPost = {};
-        container.innerHTML = generateComposer(currentPost);
-      /*} else {
-        location.hash = '#login';
-      }*/
-      break;
-
-    case '#edit':
-      if (authedAxios) {     // to see if authed Axios is created
-        container.innerHTML = generateComposer(currentPost);
-      } else {
-        location.hash = '#login';
-      }
-      break;
-
-    case '#login':        // admin page
-      // create an axios instance with auth, and make compose visible
-      const password = window.prompt('Enter your github password');
-      authedAxios = authAxios(password);
-      authedAxios.get('/user')
-        .then((res) => {
-          window.history.go(-1);
-        })
-        .catch((res) => {
-          alert('wrong pass');
-          authedAxios = undefined;
-        });
-      break;
-
-
-    /*case '#finishCompose':
-      console.log(document.getElementById('container'), document.getElementById('titleField'), document.getElementById('contentField'));
-      const title = document.getElementById('titleField').value;
-      const content = document.getElementById('contentField').value;
-      console.log("title", title);
-      console.log("content", content);
-      if (currentPost.filePath) {
-        commitEdit(authedAxios, currentPost.filePath, content);
-      } else {
-        commitNew(authedAxios, title, content);
-      };
-      break;*/
-
-    default:
-      alert('sorry, but there is no such hash')
-  };
-};
-
-handleHashChange();
-window.onhashchange = handleHashChange;
+  },
+  'admin/delete': async () => {
+    checkAdmin();
+  },
+  'admin/login/checkLogin': async () => {
+    const password = document.getElementById('loginPasswordInput').value;
+    store.authedAxios = authAxios(password);
+    console.log("password", password);
+    store.authedAxios.get('/user')
+      .then((res) => {
+        location.hash = 'admin'
+      })
+      .catch((res) => {
+        alert('wrong pass');
+        history.go(-1);
+        authedAxios = undefined;
+      });
+  },
+  'admin/login': async () => {
+    const html = renderLogin();
+    container.innerHTML = html;
+  },
+  'admin': async () => {
+    checkAdmin();
+    store.allPosts = await getAllPosts();
+    container.innerHTML = await renderMain(store.allPosts, true);
+  },
+  '': async () => {
+    checkAdmin();
+    store.allPosts = await getAllPosts();
+    container.innerHTML = await renderMain(store.allPosts);
+  },
+});

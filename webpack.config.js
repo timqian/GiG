@@ -1,7 +1,7 @@
 // doc about config: https://webpack.github.io/docs/configuration.html
 
 module.exports = {
-  entry: './src/newindex.js',
+  entry: './src/index.js',
   output: {
     path: './dist',
     publicPath: '/dist/',  // bundle 的 url 地址
