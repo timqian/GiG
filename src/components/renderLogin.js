@@ -1,3 +1,5 @@
+import { username } from "../config";
+
 /**
  * generate composer html
  *
@@ -8,8 +10,11 @@ export default () => {
   return `
     <form onsubmit="event.preventDefault();location.hash='#admin/login/checkLogin'">
       <fieldset>
-        <input type="password" id="loginPasswordInput" name="password">
-        <button type="button" onclick="location.hash='#admin/login/checkLogin'">Login</button>
+        <label for="loginUsername">Github username</label>
+        <input type="text" name="username" value="${username}" id="loginUsername" readonly>
+        <label for="loginPasswordInput">Password</label>
+        <input type="password"  name="password" id="loginPasswordInput" required>
+        <button type="submit">Login</button>
       </fieldset>
     </form>
   `;
