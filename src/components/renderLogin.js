@@ -6,7 +6,7 @@
  */
 export default () => {
   return `
-    <form>
+    <form onsubmit="event.preventDefault();location.hash='#admin/login/checkLogin'">
       <fieldset>
         <input type="password" id="loginPasswordInput" name="password">
         <button onclick="location.hash='#admin/login/checkLogin'">Login</button>
