@@ -1,104 +1,106 @@
-/**
- * Do different things for different hash
- *
- */
-
 import normalize from "!style!css!normalize.css";
-/*import milligram from '!style!css!milligram';*/
-/*import css from "!style!css!./style/style.css";*/
 import style from "!style!css!sass!./style/index.sass";
-/*import purecss from "!style!css!purecss";*/
+import Navigo from "navigo";
+import { repo } from "./config";
+import store from "./store";
+import authAxios from "./utils/authAxios";
+import checkAdmin from "./utils/checkAdmin";
+import getAllPosts from "./utils/getAllPosts";
+import getContent from "./utils/getContent";
+import commitPost from "./utils/commitPost";
+import commitEdit from "./utils/commitEdit";
+import getPostSha from "./utils/getPostSha";
+import renderPost from "./components/renderPost";
+import renderComposer from "./components/renderComposer";
+import renderLogin from "./components/renderLogin";
+import renderMain from "./components/renderMain";
+import renderPage from "./components/renderPage";
+import renderEditor from "./components/renderEditor";
 
-import generateMain from "./generateMain";
-import authAxios from "./authAxios";
-import generateComposer from "./generateComposer";
-import getContent from "./getContent";
-import marked from "marked";
-import commitNew from "./commitNew";
-import commitEdit from "./commitEdit";
-
-let authedAxios;   // to store the authed axios instance
-
-let currentPost = {
-  filePath: '',
-  fileContent: '',
-}
-
+const router = new Navigo(null, true); // root = null, useHash=true
 const container = document.getElementById('contentContainer');
 
-const handleHashChange = async () => {
-  console.log(location.hash);
-
-  // insert different html into the container
-  // according to location hash
-  switch (location.hash.split('/')[0]) {
-
-    case '':              // main page
-      container.innerHTML = await generateMain();
-      document.getElementById('editLink').style.display = 'none';
-      document.getElementById('composeLink').style.display = ''; // show compose link
-      break;
-
-    case '#posts':
-    case '#pages':                              // post or page
-      const filePath = location.hash.slice(1);
-      const md = await getContent(filePath);
-      currentPost.filePath = filePath;
-      currentPost.fileContent = md;             // set currentPost for #edit to use
-      container.innerHTML = marked(md);
-      document.getElementById('editLink').style.display = '';
-      document.getElementById('composeLink').style.display = 'none'; // show edit link
-      break;
-
-    case '#compose':
-      /*if (authedAxios) {     // to see if authed Axios is created*/
-        currentPost = {};
-        container.innerHTML = generateComposer(currentPost);
-      /*} else {
-        location.hash = '#login';
-      }*/
-      break;
-
-    case '#edit':
-      if (authedAxios) {     // to see if authed Axios is created
-        container.innerHTML = generateComposer(currentPost);
-      } else {
-        location.hash = '#login';
-      }
-      break;
-
-    case '#login':        // admin page
-      // create an axios instance with auth, and make compose visible
-      const password = window.prompt('Enter your github password');
-      authedAxios = authAxios(password);
-      authedAxios.get('/user')
-        .then((res) => {
-          window.history.go(-1);
-        })
-        .catch((res) => {
-          alert('wrong pass');
-          authedAxios = undefined;
-        });
-      break;
-
-
-    /*case '#finishCompose':
-      console.log(document.getElementById('container'), document.getElementById('titleField'), document.getElementById('contentField'));
-      const title = document.getElementById('titleField').value;
-      const content = document.getElementById('contentField').value;
-      console.log("title", title);
-      console.log("content", content);
-      if (currentPost.filePath) {
-        commitEdit(authedAxios, currentPost.filePath, content);
-      } else {
-        commitNew(authedAxios, title, content);
-      };
-      break;*/
-
-    default:
-      alert('sorry, but there is no such hash')
-  };
-};
-
-handleHashChange();
-window.onhashchange = handleHashChange;
+router.on({
+  /*'posts/:pathRelative/:title': async (params) => {        // intend for category
+    console.log("params", params);
+    checkAdmin();
+    store.currentPost.content = await getContent(`posts/${params.pathRelative}`);
+    container.innerHTML = await renderPost(store.currentPost);
+  },*/
+  'posts/:title': async (params) => {
+    checkAdmin();
+    store.currentPost.title = params.title.slice(11, -3); // delete date and '.md'
+    store.currentPost.path = `posts/${params.title}`;
+    store.currentPost.content = await getContent(store.currentPost.path);
+    container.innerHTML = await renderPost(store.currentPost.title, store.currentPost.content);
+  },
+  'pages/:title': async (params) => {
+    checkAdmin();
+    const pageContent = await getContent(`pages/${params.title}`);
+    container.innerHTML = await renderPage(pageContent);
+  },
+  'admin/compose': async () => {
+    checkAdmin();
+    const html = renderComposer();
+    container.innerHTML = html;
+  },
+  'admin/finishCompose': async () => {
+    checkAdmin();
+    const title = document.getElementById('titleField').value;
+    const content = document.getElementById('contentField').value;
+    await commitPost(title, content);
+  },
+  'admin/edit': async () => {
+    checkAdmin();
+    store.currentPost.sha = getPostSha(store.currentPost.path, store.allPosts);
+    const html = `<h1>${store.currentPost.title}</h1>${renderEditor(store.currentPost.content)}`;
+    container.innerHTML = html;
+  },
+  'admin/finishEdit': async () => {
+    checkAdmin();
+    const content = document.getElementById('editedContent').value;
+    await commitEdit(content);
+  },
+  'admin/delete': async () => {   //ref: https://developer.github.com/v3/repos/contents/#delete-a-file
+    checkAdmin();
+    store.currentPost.sha = getPostSha(store.currentPost.path, store.allPosts);
+    store.authedAxios.delete(`/repos/${repo}/contents/${store.currentPost.path}`,{
+      data: {
+        message: "delete from GiG",
+        sha: store.currentPost.sha,
+      },
+    })
+    .then(res => {
+      alert('delete success');
+      location.hash = '#';
+    })
+    .catch(res => { alert(res); });
+  },
+  'admin/login/checkLogin': async () => {
+    checkAdmin();
+    const password = document.getElementById('loginPasswordInput').value;
+    store.authedAxios = authAxios(password);
+    console.log("password", password);
+    store.authedAxios.get('/user')
+    .then(res => { location.hash = 'admin'; })
+    .catch((res) => {
+      alert('wrong pass');
+      history.go(-1);
+      authedAxios = undefined;
+    });
+  },
+  'admin/login': async () => {
+    const html = renderLogin();
+    container.innerHTML = html;
+  },
+  'admin': async () => {
+    checkAdmin();
+    store.allPosts = await getAllPosts();
+    container.innerHTML = await renderMain(store.allPosts, true);
+  },
+  '': async () => {
+    checkAdmin();
+    store.allPosts = await getAllPosts();
+    container.innerHTML = await renderMain(store.allPosts);
+  },
+});

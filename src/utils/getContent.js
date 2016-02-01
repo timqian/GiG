@@ -10,7 +10,10 @@ import axios from "axios";
 export default async (filePath) => {
   const url = `${contentBaseURL}/${repo}/gh-pages/${filePath}`;
   const res = await axios.get(url)
-    .catch((res) => {console.log(res);});
+  .catch((res) => {
+    console.log(res);
+    alert(res);
+  });
   const content = res.data;
   return content;
 };
