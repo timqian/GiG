@@ -8,7 +8,7 @@ export default () => {
   return `
     <form>
       <fieldset>
-        <input type="password" id="loginPasswordInput">
+        <input type="password" id="loginPasswordInput" name="password">
         <button onclick="location.hash='#admin/login/checkLogin'">Login</button>
       </fieldset>
     </form>
