@@ -9,7 +9,7 @@ export default () => {
     <form>
       <fieldset>
         <input type="password" id="loginPasswordInput">
-        <a href="#admin/login/checkLogin" class="button" >Login</a>
+        <button onclick="location.hash='#admin/login/checkLogin'">Login</button>
       </fieldset>
     </form>
   `;
