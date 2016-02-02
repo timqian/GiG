@@ -20,8 +20,8 @@ Then this is for you!
 ## Commends
 
 - `npm install`: install dependencies
-- `npm install`: start webpack dev server
-- `npm install`: build using webpack
+- `npm start`: start webpack dev server
+- `npm run build`: build using webpack
 
 ## Note:
 
