@@ -1,6 +1,6 @@
 ## About GiG
 
-[GiG](Content Management System using github as its backend ) is a Content Management System using github as its backend. 
+[GiG](https://github.com/timqian/GiG/) is a Content Management System using github as its backend. 
 
 The reason I made GiG is so that I can write, edit, preview my blog easier than just using github pages and [Jeycll](https://github.com/cancelzz/jeykll). 
 
