@@ -23,10 +23,10 @@ const router = new Navigo(null, true); // root = null, useHash=true
 const container = document.getElementById('contentContainer');
 
 router.on({
-  /*'posts/:pathRelative/:title': async (params) => {        // intend for category
+  /*'posts/:relativePath/:title': async (params) => {        // intend for category
     console.log("params", params);
     checkAdmin();
-    store.currentPost.content = await getContent(`posts/${params.pathRelative}`);
+    store.currentPost.content = await getContent(`posts/${params.relativePath}`);
     container.innerHTML = await renderPost(store.currentPost);
   },*/
   'posts/:title': async (params) => {
