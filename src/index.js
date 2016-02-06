@@ -1,7 +1,7 @@
 import normalize from "!style!css!normalize.css";
 import style from "!style!css!sass!./style/index.sass";
 import Navigo from "navigo";
-import { repo } from "./config";
+import { repo, siteName } from "./config";
 import store from "./store";
 import authAxios from "./utils/authAxios";
 import checkAdmin from "./utils/checkAdmin";
@@ -17,14 +17,16 @@ import renderMain from "./components/renderMain";
 import renderPage from "./components/renderPage";
 import renderEditor from "./components/renderEditor";
 
+document.getElementById('siteName').innerText = siteName;
+
 const router = new Navigo(null, true); // root = null, useHash=true
 const container = document.getElementById('contentContainer');
 
 router.on({
-  /*'posts/:pathRelative/:title': async (params) => {        // intend for category
+  /*'posts/:relativePath/:title': async (params) => {        // intend for category
     console.log("params", params);
     checkAdmin();
-    store.currentPost.content = await getContent(`posts/${params.pathRelative}`);
+    store.currentPost.content = await getContent(`posts/${params.relativePath}`);
     container.innerHTML = await renderPost(store.currentPost);
   },*/
   'posts/:title': async (params) => {
@@ -80,7 +82,7 @@ router.on({
     checkAdmin();
     const password = document.getElementById('loginPasswordInput').value;
     store.authedAxios = authAxios(password);
-    console.log("password", password);
+    /*console.log("password", password);*/
     store.authedAxios.get('/user')
     .then(res => { location.hash = 'admin'; })
     .catch((res) => {

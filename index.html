@@ -6,17 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>GiG</title>
     <!-- Google Fonts -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
-
-    <!-- CSS Reset -->
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css"> -->
+    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic"> -->
   </head>
 
   <body>
 
     <header>
-      <a href='#' class="brand">GiG</a>
-      <a class="item" href='#pages/about.md'  >about</a> &nbsp
+      <a href='#' class="brand" id="siteName"></a>
+      <a class="item" href='#pages/about.md'>about</a> &nbsp
 
       <a class="item" href='#admin' id='adminLink' >admin</a>
       <a class="item" href='#admin/compose' id='composeLink' style='display:none'>compose</a>
@@ -24,9 +21,9 @@
       <a class="item" href='#admin/delete' id='deleteLink' style='display:none'>delete</a>
     </header>
 
-    <main id='contentContainer'></main>
+    <main class="container" id='contentContainer'></main>
 
-    <footer>
+    <footer class="container">
       powerd by &nbsp<a href='https://github.com/timqian/GiG'>GiG</a>
     </footer>
 
