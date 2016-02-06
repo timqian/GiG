@@ -2,7 +2,7 @@ import axios from "axios";
 import { apiBaseURL, repo } from "../config";
 
 /**
- * retive all the posts on github
+ * retive all the files under the path: posts
  *
  * @return {Object}
  */
@@ -10,7 +10,7 @@ export default async () => {
   const url = `${apiBaseURL}/repos/${repo}/contents/posts`;
   const res = await axios.get(url).catch((res) => {alert(res);});
 
-  // name example: 2016-01-31 example name.md
+  console.log("res.data", res.data);
   const posts = res.data
     .map((item) => {
       /*console.log("item", item);*/

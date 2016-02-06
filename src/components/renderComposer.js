@@ -11,7 +11,7 @@ export default (categories=[]) => {
       <div class="container">
         <div class="row">
           <input class="column" type="text" placeholder="Title" id="titleField">
-          <select class="column column-25">
+          <select class="column column-25" name="test">
             <option value="volvo">Volvo</option>
             <option value="saab" selected>Saab</option>
             <option value="fiat">Fiat</option>

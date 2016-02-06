@@ -23,19 +23,20 @@ const router = new Navigo(null, true); // root = null, useHash=true
 const container = document.getElementById('contentContainer');
 
 router.on({
-  /*'posts/:relativePath/:title': async (params) => {        // intend for category
+  'posts/:relativePath/:title': async (params) => {        // intend for category
     console.log("params", params);
-    checkAdmin();
-    store.currentPost.content = await getContent(`posts/${params.relativePath}`);
-    container.innerHTML = await renderPost(store.currentPost);
-  },*/
-  'posts/:title': async (params) => {
+  },
+  'posts/:relativePath': async (params) => {
+    console.log("params", params);
+    
+  },
+  /*'posts/:title': async (params) => {
     checkAdmin();
     store.currentPost.title = params.title.slice(11, -3); // delete date and '.md'
     store.currentPost.path = `posts/${params.title}`;
     store.currentPost.content = await getContent(store.currentPost.path);
     container.innerHTML = await renderPost(store.currentPost.title, store.currentPost.content);
-  },
+  },*/
   'pages/:title': async (params) => {
     checkAdmin();
     const pageContent = await getContent(`pages/${params.title}`);
