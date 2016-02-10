@@ -1,14 +1,18 @@
-import flattenPosts from "../utils/flattenPosts";
-
 /**
- * render main page given posts
+ * render categories page given posts
  * @param  {Object} posts
  * @return {html}       html to fill into container
  */
-export default (posts) => {  //posts: {life:[], tech:[], science:[]}
+export default (allPosts) => {  //posts: {life:[], tech:[], science:[]}
+  const categores = Object.keys(allPosts).map(key => {
+    const oneCatego = renderLinks( allPosts[key] );
+    return `<h4 class="categoryHead">${key}</h4>${oneCatego}`;
+  });
+  return categores.join('');
+}
 
-  let postsList = flattenPosts(posts);
-  const html = postsList
+function renderLinks(posts) {
+  const links = posts
     .sort((a, b) => {             // 如果返回值大于0，则 a 在前(日期最近的放上面)
       return new Date(b.date) - new Date(a.date);
     })
@@ -22,5 +26,5 @@ export default (posts) => {  //posts: {life:[], tech:[], science:[]}
       `;
     });
 
-  return `<ul>${html.join('')}</ul>`;
+  return `<ul>${links.join('')}</ul>`;
 }

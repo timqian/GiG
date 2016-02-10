@@ -13,29 +13,17 @@ async function getPostsRecursively() {
   const urlPromises = dirUrls.map(url => axios.get(url));
   const resSecondArray = await Promise.all(urlPromises).catch(err => {console.log('Failed: ', err);});
   const posts =
-  /*resSecondArray.map(res => {
-    return res.data.map(item => {
-      return {Ç
-        title: item.name.slice(11, -3),
-        date:item.name.slice(0, 10),
-        path: item.path,
-        sha: item.sha
-      };
-    });
-  });*/
-  resSecondArray.reduce((p, c, i) => {
-    console.log("category", categories);
-    p[categories[i]] = c.data.map(item => {
-      return {
-        title: item.name.slice(11, -3),
-        date:item.name.slice(0, 10),
-        path: item.path,
-        sha: item.sha
-      };
-    });
-    return p;
-  }, {});
-  /*console.log("posts", posts);*/
+    resSecondArray.reduce((p, c, i) => {
+      p[categories[i]] = c.data.map(item => {
+        return {
+          title: item.name.slice(11, -3),
+          date:item.name.slice(0, 10),
+          path: item.path,
+          sha: item.sha
+        };
+      });
+      return p;
+    }, {});
   return posts;
 
 }

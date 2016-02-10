@@ -10,8 +10,12 @@ import store from "../store";
  * @param  {String} content
  * @return {Boolean}         return success or not
  */
-export default async (title, content) => {
-
+export default async (title, category, content) => {
+  if(!title){
+    alert('title can not be empty');
+    history.go(-1);
+    return;
+  }
   // generate dateString
   const date = new Date();
   const year = date.getFullYear();
@@ -23,9 +27,9 @@ export default async (title, content) => {
   // generate fileName
   const fileName = `${dateString}-${title}.md`;
 
-  const putUrl = `/repos/${repo}/contents/posts/${fileName}`;
+  const putUrl = `/repos/${repo}/contents/posts/${category}/${fileName}`;
   const res = await store.authedAxios.put(putUrl, {
-    message: 'commited from simple-cms',
+    message: 'commited from GiG',
     content: window.btoa(unescape(encodeURIComponent(content))),  //according to http://stackoverflow.com/questions/23223718/failed-to-execute-btoa-on-window-the-string-to-be-encoded-contains-characte
   }).catch((res) => {
     console.log("res", res);

@@ -17,6 +17,7 @@ import renderLogin from "./components/renderLogin";
 import renderMain from "./components/renderMain";
 import renderPage from "./components/renderPage";
 import renderEditor from "./components/renderEditor";
+import renderCategories from "./components/renderCategories";
 
 document.getElementById('siteName').innerText = siteName;
 
@@ -38,14 +39,16 @@ router.on({
   },
   'admin/compose': async () => {
     checkAdmin();
-    const html = renderComposer();
+    const html = renderComposer( Object.keys(store.allPosts) );
     container.innerHTML = html;
   },
   'admin/finishCompose': async () => {
     checkAdmin();
     const title = document.getElementById('titleField').value;
+    const category = document.getElementById('categoriesSelector').value;
+    console.log("category", category);
     const content = document.getElementById('contentField').value;
-    await commitPost(title, content);
+    await commitPost(title, category, content);
   },
   'admin/edit': async () => {
     checkAdmin();
@@ -77,7 +80,6 @@ router.on({
     checkAdmin();
     const password = document.getElementById('loginPasswordInput').value;
     store.authedAxios = authAxios(password);
-    /*console.log("password", password);*/
     store.authedAxios.get('/user')
     .then(res => { location.hash = 'admin'; })
     .catch((res) => {
@@ -92,11 +94,13 @@ router.on({
   },
   'admin': async () => {
     checkAdmin();
-    store.allPosts = await getAllPosts();
-    container.innerHTML = await renderMain(store.allPosts, true);
+    store.allPosts = await getPostsRecursively();
+    container.innerHTML = await renderMain(store.allPosts);
   },
   'categories': async () => {
-    alert('TODO');
+    checkAdmin();
+    store.allPosts = await getPostsRecursively();
+    container.innerHTML = await renderCategories(store.allPosts);
   },
   '': async () => {
     checkAdmin();

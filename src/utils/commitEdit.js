@@ -13,7 +13,7 @@ export default async (content) => {
 
   const putUrl = `/repos/${repo}/contents/${store.currentPost.path}`;
   const res = await store.authedAxios.put(putUrl, {
-    message: 'commited from simple-cms',
+    message: 'commited from GiG',
     content: window.btoa(unescape(encodeURIComponent(content))),  //according to http://stackoverflow.com/questions/23223718/failed-to-execute-btoa-on-window-the-string-to-be-encoded-contains-characte
     sha: store.currentPost.sha,
   }).catch((res) => {

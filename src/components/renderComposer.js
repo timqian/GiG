@@ -5,22 +5,20 @@
  * @return {String}             composer with content and title in it
  */
 export default (categories=[]) => {
+  const options = categories.map(category => `<option value="${category}">${category}</option>`).concat('');
   return `
     <form>
       <fieldset>
       <div class="container">
         <div class="row">
           <input class="column" type="text" placeholder="Title" id="titleField">
-          <select class="column column-25" name="test">
-            <option value="volvo">Volvo</option>
-            <option value="saab" selected>Saab</option>
-            <option value="fiat">Fiat</option>
-            <option value="audi">Audi</option>
+          <select class="column column-25" name="category" id="categoriesSelector">
+            ${options}
           </select>
         </div>
       </div>
 
-        <textarea placeholder="markdown content" id="contentField" style="height:65vh;min-height:30rem"></textarea>
+        <textarea placeholder="markdown content" class="contentField" id="contentField"></textarea>
         <a href="#admin/finishCompose" class="button" >send</a>
       </fieldset>
     </form>

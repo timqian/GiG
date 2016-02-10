@@ -70,3 +70,9 @@ https://github.com/search?utf8=%E2%9C%93&q=test+repo%3Atimqian%2Fsimple-cms+path
 
 ## 用 `?admin` 来表示用户处于 admin 状态
 or 用 多一个 router: /admin/, /admin/posts/:name, admin/pages/:name, admin/
+
+## 缺点
+
+由于不能在 components 中定义复杂事件。打破了高内聚低耦合的原则。本来 写完 blog push 到 github 上的功能可以写到 renderComposer 中，现在被迫多在 index 中多搞个路由，在utils 中多搞个函数，增加应用复杂度和维护成本！
+
+## cms 系统设计的哲学：get the fuck done and make the code as simple as possible

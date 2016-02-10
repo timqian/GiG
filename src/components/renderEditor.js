@@ -7,7 +7,7 @@ export default (content) => {
   return `
     <form>
       <fieldset>
-        <textarea placeholder="markdown content" id="editedContent" style="height:65vh;min-height:30rem" required>${content}</textarea>
+        <textarea placeholder="markdown content" class="contentField" id="editedContent" required>${content}</textarea>
         <a href="#admin/finishEdit" class="button" >send</a>
       </fieldset>
     </form>
