@@ -6,6 +6,7 @@ import store from "./store";
 import authAxios from "./utils/authAxios";
 import checkAdmin from "./utils/checkAdmin";
 import getAllPosts from "./utils/getAllPosts";
+import getPostsRecursively from "./utils/getPostsRecursively";
 import getContent from "./utils/getContent";
 import commitPost from "./utils/commitPost";
 import commitEdit from "./utils/commitEdit";
@@ -24,19 +25,12 @@ const container = document.getElementById('contentContainer');
 
 router.on({
   'posts/:relativePath/:title': async (params) => {        // intend for category
-    console.log("params", params);
-  },
-  'posts/:relativePath': async (params) => {
-    console.log("params", params);
-    
-  },
-  /*'posts/:title': async (params) => {
     checkAdmin();
     store.currentPost.title = params.title.slice(11, -3); // delete date and '.md'
-    store.currentPost.path = `posts/${params.title}`;
+    store.currentPost.path = `posts/${params.relativePath}/${params.title}`;
     store.currentPost.content = await getContent(store.currentPost.path);
     container.innerHTML = await renderPost(store.currentPost.title, store.currentPost.content);
-  },*/
+  },
   'pages/:title': async (params) => {
     checkAdmin();
     const pageContent = await getContent(`pages/${params.title}`);
@@ -101,9 +95,12 @@ router.on({
     store.allPosts = await getAllPosts();
     container.innerHTML = await renderMain(store.allPosts, true);
   },
+  'categories': async () => {
+    alert('TODO');
+  },
   '': async () => {
     checkAdmin();
-    store.allPosts = await getAllPosts();
+    store.allPosts = await getPostsRecursively();
     container.innerHTML = await renderMain(store.allPosts);
   },
 });

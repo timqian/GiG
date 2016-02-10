@@ -3,7 +3,7 @@
  */
 export default {
   authedAxios: undefined,  // will be created when user login
-  allPosts: [],            // [{title:**,  date:**,   path:**,  sha:**,}]
+  allPosts: [],            // [{title:**,  date:**,   path:**,  sha:**,}]  // {life:[], tech:[], science:[]}
   currentPost: {
     title: undefined,
     path: undefined,

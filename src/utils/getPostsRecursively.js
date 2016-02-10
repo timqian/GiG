@@ -1,32 +1,43 @@
 import axios from "axios";
 import { apiBaseURL, repo } from "../config";
 
-const url = `${apiBaseURL}/repos/${repo}/contents/posts`;
-let posts = [];
-
 /**
  * Retrive all the files under the path: posts
  *
- * @return {Object}
+ * @return {Object}  structure: {life:[posts], tech:[], science:[], ...}
  */
 async function getPostsRecursively() {
-  const res = await axios.get(url).catch((res) => {alert(res);});
-
-  res.data.forEach((item) => {
-    /*console.log("item", item);*/
-    if (item.type === 'dir') {
-      await getPostsRecursively();
-    } else {
-      posts.push({
+  const resFirstObject = await axios.get(`${apiBaseURL}/repos/${repo}/contents/posts`).catch(res => {alert(res);});
+  const dirUrls = resFirstObject.data.map(item => item.url);
+  const categories = resFirstObject.data.map(item => item.name);;
+  const urlPromises = dirUrls.map(url => axios.get(url));
+  const resSecondArray = await Promise.all(urlPromises).catch(err => {console.log('Failed: ', err);});
+  const posts =
+  /*resSecondArray.map(res => {
+    return res.data.map(item => {
+      return {Ç
         title: item.name.slice(11, -3),
         date:item.name.slice(0, 10),
         path: item.path,
         sha: item.sha
-      });
-    }
-  });
-    /*console.log("posts", posts);*/
+      };
+    });
+  });*/
+  resSecondArray.reduce((p, c, i) => {
+    console.log("category", categories);
+    p[categories[i]] = c.data.map(item => {
+      return {
+        title: item.name.slice(11, -3),
+        date:item.name.slice(0, 10),
+        path: item.path,
+        sha: item.sha
+      };
+    });
+    return p;
+  }, {});
+  /*console.log("posts", posts);*/
   return posts;
+
 }
 
 export default getPostsRecursively;
